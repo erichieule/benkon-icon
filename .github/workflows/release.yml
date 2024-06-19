@@ -11,16 +11,24 @@ on:
         required: true
         description: Version
         type: string
+    inputs:
+      NPM_TOKEN:
+        required: false
+        description: NPM_TOKEN
+        type: string
 
   workflow_dispatch:
     inputs:
       version:
         description: Version
         required: true
+    inputs:
+      NPM_TOKEN:
+        description: NPM_TOKEN
+        required: true
 
 jobs:
   pre-release:
-    if: github.repository == 'lucide-icons/lucide' && contains('["ericfennis", "karsa-mistmere"]', github.actor)
     runs-on: ubuntu-latest
     outputs:
       VERSION: ${{ steps.get_version.outputs.VERSION }}
@@ -35,7 +43,6 @@ jobs:
           VERSION_REF: ${{ inputs.version || github.event.inputs.version || github.ref }}
 
   release:
-    if: github.repository == 'lucide-icons/lucide'
     runs-on: ubuntu-latest
     needs: pre-release
     strategy:
@@ -43,15 +50,7 @@ jobs:
       matrix:
         package:
           [
-            'lucide',
             'lucide-react',
-            'lucide-react-native',
-            'lucide-vue',
-            'lucide-vue-next',
-            'lucide-angular',
-            'lucide-preact',
-            'lucide-solid',
-            'lucide-svelte',
           ]
     steps:
       - uses: actions/checkout@v4
@@ -82,7 +81,6 @@ jobs:
         run: pnpm --filter ${{ matrix.package }} publish --no-git-checks --ignore-scripts
 
   lucide-static:
-    if: github.repository == 'lucide-icons/lucide'
     runs-on: ubuntu-latest
     needs: [pre-release, lucide-font]
     steps:
@@ -115,7 +113,6 @@ jobs:
         run: pnpm --filter lucide-static publish --no-git-checks
 
   lucide-font:
-    if: github.repository == 'lucide-icons/lucide'
     runs-on: ubuntu-latest
     needs: pre-release
     steps:
@@ -144,7 +141,6 @@ jobs:
           path: lucide-font
 
   post-release:
-    if: github.repository == 'lucide-icons/lucide'
     runs-on: ubuntu-latest
     needs: [pre-release, lucide-font]
 
