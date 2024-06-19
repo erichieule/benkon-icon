@@ -11,7 +11,6 @@ on:
         required: true
         description: Version
         type: string
-    inputs:
       NPM_TOKEN:
         required: false
         description: NPM_TOKEN
@@ -22,7 +21,6 @@ on:
       version:
         description: Version
         required: true
-    inputs:
       NPM_TOKEN:
         description: NPM_TOKEN
         required: true
