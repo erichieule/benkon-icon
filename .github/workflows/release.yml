@@ -55,12 +55,10 @@ jobs:
         with:
           node-version: 20
           cache: 'pnpm'
+          registry-url: https://npm.pkg.github.com/
 
       - name: Set new version
-        run: pnpm --filter ${{ matrix.package }} version --new-version ${{ needs.pre-release.outputs.VERSION }} --no-git-tag-version
-
-      - name: Set Auth Token
-        run: npm config set //registry.npmjs.org/:_authToken ${{ inputs.NPM_TOKEN || secrets.NPM_TOKEN }}
+        run: pnpm --filter ${{ matrix.package }} version --new-version ${{ needs.pre-release.outputs.VERSION }} 
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -72,7 +70,9 @@ jobs:
         run: pnpm --filter ${{ matrix.package }} test
 
       - name: Publish
-        run: pnpm --filter ${{ matrix.package }} publish --no-git-checks --ignore-scripts
+        run: pnpm --filter ${{ matrix.package }} publish --no-git-checks --ignore-scripts --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
   # lucide-static:
   #   runs-on: ubuntu-latest
