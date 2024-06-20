@@ -34,6 +34,9 @@ jobs:
           VERSION_REF: ${{ inputs.version || github.event.inputs.version || github.ref }}
 
   release:
+    permissions:
+      packages: write
+      contents: read
     runs-on: ubuntu-latest
     needs: pre-release
     strategy:
