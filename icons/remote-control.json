@@ -1,0 +1,13 @@
+{
+  "$schema": "../icon.schema.json",
+  "contributors": [
+    "eric"
+  ],
+  "tags": [
+    "remote",
+    "control"
+  ],
+  "categories": [
+    "devices"
+  ]
+}
